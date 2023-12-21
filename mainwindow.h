@@ -28,10 +28,14 @@ private slots:
 
     void on_listPhones_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
+    void on_buttonDelete_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     QList<PhoneBookItem*> _phoneBook;
     PhoneBookItem *_selectedItem;
+
+    void ShowList();
 };
 #endif // MAINWINDOW_H

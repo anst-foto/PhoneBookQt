@@ -26,16 +26,30 @@ MainWindow::~MainWindow()
     delete _selectedItem;
 }
 
+void MainWindow::ShowList() {
+    foreach (auto item, _phoneBook) {
+        auto result = ui->listPhones->findItems(item->getPhone(), Qt::MatchExactly);
+        if (result.isEmpty()) {
+            ui->listPhones->addItem(item->getPhone());
+        }
+    }
+}
+
 void MainWindow::on_buttonSave_clicked()
 {
     _selectedItem = new PhoneBookItem(ui->inputName->text(), ui->inputPhone->text());
 
+    auto flag = false;
     foreach (auto item, _phoneBook) {
         if (item->getPhone() == _selectedItem->getPhone()) {
             item->setName(_selectedItem->getName());
-        } else {
-            _phoneBook.append(_selectedItem);
+            flag = true;
         }
+    }
+
+    if (!flag) {
+        _phoneBook.append(_selectedItem);
+        ShowList();
     }
 }
 
@@ -55,5 +69,20 @@ void MainWindow::on_listPhones_currentItemChanged(QListWidgetItem *current, QLis
             ui->inputName->setText(item->getName());
         }
     }
+}
+
+void MainWindow::on_buttonDelete_clicked()
+{
+    _selectedItem = new PhoneBookItem(ui->inputName->text(), ui->inputPhone->text());
+
+    int i = 0;
+    foreach (auto item, _phoneBook) {
+        if (item->getPhone() == _selectedItem->getPhone()) {
+            _phoneBook.removeAt(i);
+        }
+        i += 1;
+    }
+
+    ui->listPhones->takeItem(ui->listPhones->currentIndex().row());
 }
 
